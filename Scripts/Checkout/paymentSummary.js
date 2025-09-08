@@ -24,7 +24,7 @@ export function renderPaymentSummary() {
 
 
   let checkOut = `Checkout <a class="return-to-home-link "
-            href="amazon.html"> (${itemTotal}) items</a>`;
+            href="amazon.html"> (${itemTotal} items) </a>`;
    
 
   const totalBeforeTaxCents = productPriceCent + shippingPriceCents;
