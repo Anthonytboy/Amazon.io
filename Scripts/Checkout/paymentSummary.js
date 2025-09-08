@@ -6,6 +6,8 @@ import { formatCurrency } from '../utils/money.js';
 export function renderPaymentSummary() {
   let productPriceCent = 0;
   let shippingPriceCents = 0;
+  let itemTotal = 0;
+
 
   cart.forEach((cartItem) => {
     const product = getProduct(cartItem.productId);
@@ -13,18 +15,30 @@ export function renderPaymentSummary() {
 
     const deliveryOption = getDeliveryOption(cartItem.deliveryOptionId);
     shippingPriceCents += deliveryOption.priceCents;
+
+    const totalItem = cartItem.productId;
+    itemTotal += cartItem.quantity
+
+
   });
-  
+
+
+  let checkOut = `Checkout <a class="return-to-home-link "
+            href="amazon.html"> (${itemTotal}) items</a>`;
+   
+
   const totalBeforeTaxCents = productPriceCent + shippingPriceCents;
   const taxCents = totalBeforeTaxCents * 0.1;
   const totalCents = totalBeforeTaxCents + taxCents;
+
   const paymentSummaryhtml = `
+         
          <div class="payment-summary-title">
             Order Summary
           </div>
 
-          <div class="payment-summary-row">
-            <div>Items (3):</div>
+          <div class="payment-summary-row js-payment-summary-row">
+            <div>Items (${itemTotal}):</div>
             <div class="payment-summary-money">
             $${formatCurrency(productPriceCent)}</div>
           </div>
@@ -62,7 +76,7 @@ export function renderPaymentSummary() {
           </button>
   `;
 
+  document.querySelector('.js-checkout-items').innerHTML = checkOut;
+  
   document.querySelector('.js-payment-summary').innerHTML = paymentSummaryhtml;
-
 }
-

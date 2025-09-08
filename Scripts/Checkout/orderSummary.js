@@ -1,10 +1,9 @@
 import { cart, removeFromCart, updateDeliveryOption } from '../../data/cart.js';
 import { products, getProduct } from '../../data/products.js';
 import { formatCurrency } from '../utils/money.js';
-import dayjs from 'https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js';
 import {
   deliveryOptions,
-  getDeliveryOption,
+  getDeliveryOption, calculateEstimatedDeliveryDate
 } from '../../data/deliveryOptions.js';
 import { renderPaymentSummary } from './paymentSummary.js';
 
@@ -20,9 +19,7 @@ export function renderOrderSummary() {
 
     const deliveryOption = getDeliveryOption(deliveryOptionId);
 
-    const today = dayjs();
-    const deliveryDate = today.add(deliveryOption.deliveryDays, 'days');
-    const dateString = deliveryDate.format('dddd, MMMM D');
+    const dateString = calculateEstimatedDeliveryDate(deliveryOption.deliveryDays);
 
     cartSummaryHTML += `
       <div class="cart-item-container js-cart-item-container-${
@@ -49,7 +46,9 @@ export function renderOrderSummary() {
                           cartItem.quantity
                         }</span>
                       </span>
-                      <span class="update-quantity-link link-primary">
+                      <span class="update-quantity-link link-primary js-update-quantity-link" data-product-id="${
+                        matchingProduct.id
+                      }">
                         Update
                       </span>
                       <span class="delete-quantity-link link-primary js-delete-link" data-product-id="${
@@ -76,9 +75,10 @@ export function renderOrderSummary() {
   function deliverOptionsHTML(matchingProduct, cartItem) {
     let html = '';
     deliveryOptions.forEach((deliveryOption) => {
-      const today = dayjs();
-      const deliveryDate = today.add(deliveryOption.deliveryDays, 'days');
-      const dateString = deliveryDate.format('dddd, MMMM D');
+     
+       const dateString = calculateEstimatedDeliveryDate(
+         deliveryOption.deliveryDays
+       );
 
       const priceCents =
         deliveryOption.priceCents === 0
@@ -116,9 +116,9 @@ export function renderOrderSummary() {
       const container = document.querySelector(
         `.js-cart-item-container-${productId}`
       );
-
       container.remove();
 
+      renderOrderSummary();
       renderPaymentSummary();
     });
   });
