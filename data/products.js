@@ -105,7 +105,9 @@ object3.method('thiss')
 export let products = [];
 
 export function loadProductsFetch() {
-  const promise = fetch('https://supersimplebackend.dev/products')
+  const promise = fetch(
+    'https://supersimplebackend.dev/products'
+  )
     .then((response) => {
       return response.json();
     })
@@ -126,13 +128,11 @@ export function loadProductsFetch() {
   return promise;
 }
 
-/*
-
 loadProductsFetch().then(() => {
   console.log('Products loaded using fetch and promises');
 });
 
-*/
+
 
 export function loadProducts(fun) {
   const xhr = new XMLHttpRequest();
