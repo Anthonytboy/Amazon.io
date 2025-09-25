@@ -6,12 +6,20 @@ import { loadCart } from '../data/cart.js';
 // import '../data/backaend-practice.js';
 
 async function loadPage() {
-  await loadProductsFetch();
- const value = await new Promise((resolve) => {
-    loadCart(() => {
-      resolve('value 3');
+  try {
+    // throw 'error 1';
+
+    await loadProductsFetch();
+    const value = await new Promise((resolve, reject) => {
+      // throw 'error 2';
+      loadCart(() => {
+        // reject('error 3');
+        resolve('value 3');
+      });
     });
-  });
+  } catch (error) {
+    console.error('An error occurred while loading the products.');
+  }
 
   renderOrderSummary();
   renderPaymentSummary();

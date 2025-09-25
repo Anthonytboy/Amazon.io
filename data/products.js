@@ -105,9 +105,7 @@ object3.method('thiss')
 export let products = [];
 
 export function loadProductsFetch() {
-  const promise = fetch(
-    'https://supersimplebackend.dev/products'
-  )
+  const promise = fetch('https://supersimplebackend.dev/products')
     .then((response) => {
       return response.json();
     })
@@ -123,16 +121,23 @@ export function loadProductsFetch() {
       });
 
       console.log('load Products');
+    })
+    .catch((error) => {
+     console.error('An error occurred while loading the products.');
     });
 
   return promise;
 }
 
+// loadProductsFetch();
+
+/*
+
 loadProductsFetch().then(() => {
   console.log('Products loaded using fetch and promises');
 });
 
-
+*/
 
 export function loadProducts(fun) {
   const xhr = new XMLHttpRequest();
@@ -152,9 +157,16 @@ export function loadProducts(fun) {
 
     fun();
   });
+
+  xhr.addEventListener('error', (error) => {
+    //console.error('An error occurred while loading the products.');
+  });
+
   xhr.open('GET', 'https://supersimplebackend.dev/products');
   xhr.send();
 }
+
+loadProducts();
 /*
 export const products = [
   {
